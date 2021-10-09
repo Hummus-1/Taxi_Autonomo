@@ -60,13 +60,15 @@ void TerminalInput() {
 }
 
 void ManualObstacles(unsigned n, unsigned m) {
+  Position obstacle;
   std::cout << "\nHa seleccionado el modo manual \n";
   std::cout << "Introduzca el número de obstáculos deseado: ";
   for (unsigned i = 0; i < RequestInt(0, n * m); i++) {
-    std::cout << "Introduzca el valor de la fila: ";
-    RequestInt(0, n);
-    std::cout << "Introduzca el valor de la columna: ";
-    RequestInt(0, m);
+    std::cout << "Introduzca el numero de fila: ";
+    obstacle.first = RequestInt(0, n);
+    std::cout << "Introduzca numero de columna: ";
+    obstacle.second = RequestInt(0, m);
+    // AddObstacle(obstacle);
   }
 }
 
