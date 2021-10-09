@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MenuUtility.h"
+#include "Cell.h"
 
 #include <iostream>
 #include <fstream>
@@ -13,10 +14,10 @@
 bool RequestBool();
 int RequestInt(int min, int max);
 void TerminalInput();
-void ManualObstacles(int n, int m);
-void AutomaticObstacles(int n, int m);
+void ManualObstacles(unsigned n, unsigned m);
+void AutomaticObstacles(unsigned n, unsigned m);
 void FileInput();
-void Route();
+void Route(); // Pasar el objeto mundo
 void CreateEnvironment();
 void MenuMessage();
 void Help();

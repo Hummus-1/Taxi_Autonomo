@@ -1,5 +1,5 @@
 #include "Cell.h"
-Cell::Cell()
+/*Cell::Cell()
 {
    this->in_use_=false;
 }
@@ -13,4 +13,4 @@ bool Cell::GetCell(){
 }
 void Cell::GetActualPosition(bool in_use){
     this->in_use_=in_use;
-}
+}*/

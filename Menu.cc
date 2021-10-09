@@ -59,18 +59,18 @@ void TerminalInput() {
   //return FunciondelEntorno(n, m);
 }
 
-void ManualObstacles(int n, int m) {
+void ManualObstacles(unsigned n, unsigned m) {
   std::cout << "\nHa seleccionado el modo manual \n";
   std::cout << "Introduzca el número de obstáculos deseado: ";
   for (unsigned i = 0; i < RequestInt(0, n * m); i++) {
-    std::cout << "Introduzca el valor de la fila\n";
+    std::cout << "Introduzca el valor de la fila: ";
     RequestInt(0, n);
-    std::cout << "Introduzca el valor de la columna\n";
+    std::cout << "Introduzca el valor de la columna: ";
     RequestInt(0, m);
   }
 }
 
-void AutomaticObstacles(int n, int m) {
+void AutomaticObstacles(unsigned n, unsigned m) {
   std::cout << "\nHa seleccionado el modo automático \n";
   std::cout << "Seleccione el porcentaje de obstáculos deseado: ";
   for (unsigned i = 0; i < ((n * m) * (RequestInt(0, 100) / 100)); i++) {
@@ -103,15 +103,19 @@ void FileInput() {
   }
 }
 
-void Route() {
+void Route() { // Hay que pasarle objeto mundo
+  Position start, end;
   std::cout << "A continuación deberá seleccionar la posición de inicio de la ruta \n";
-  std::string input;
-  std::getline(std::cin, input); //Solucionar problema de input
-  std::vector<std::string> ini_position_vector = split(input, 2);
+  std::cout << "Introduzca el numero de fila: ";
+  start.first = RequestInt(0, 100); // El maximo vendra definido por el objeto mundo
+  std::cout << "Introduzca numero de columna: ";
+  start.second = RequestInt(0, 100); // El maximo vendra definido por el objeto mundo
   std::cout << "A continuación deberá seleccionar la posición final de la ruta \n";
-  std::getline(std::cin, input);
-  std::vector<std::string> end_position_vector = split(input, 2);
-  // GenerateRoute(n, m, n, m)
+  std::cout << "Introduzca el numero de fila: ";
+  end.first = RequestInt(0, 100); // El maximo vendra definido por el objeto mundo
+  std::cout << "Introduzca numero de columna: ";
+  end.second = RequestInt(0, 100); // El maximo vendra definido por el objeto mundo
+  // GenerateRoute(start, end)
 }
 
 void CreateEnvironment() {
