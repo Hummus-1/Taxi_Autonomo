@@ -1,0 +1,18 @@
+n m - dos ints entre 10 y 10000
+0 o 1 para seleccionar modo auto o manual
+  si es auto -> int entre 0 y 100
+  si es manual -> numero de obstaculos a poner -> int entre 0 y n*m
+    añadir posicion de cada obstaculo -> n m
+
+Ejemplo auto con entorno 10x10 y 30% obstaculos
+10 10
+0
+30
+
+Ejemplo manual con entorno 5x10 y con 3 obstaculos
+5 10
+1
+3
+1 9
+2 6
+4 3
