@@ -34,7 +34,7 @@ int RequestInt(int min, int max) {
   }
   catch(const char* error) {
     std::cout << error << "\n";
-    std::cout << "El valor debe esta dentro del rango " << min << "-" << max << "\n";
+    std::cout << "El valor debe estar dentro del rango " << min << "-" << max << "\n";
     return RequestInt(min, max);
   }
   catch (const std::invalid_argument& e) {
@@ -195,7 +195,7 @@ void Menu() {
 
 void Welcome() {
   std::cout << " ------------------------------------------------------------------\n";
-  std::cout << "|                  ¡¡Bienvenido al taxi autonomo DAR!!            |\n";            
+  std::cout << "|                  ¡¡Bienvenido al taxi autonomo DAR!!             |\n";            
   std::cout << " ------------------------------------------------------------------\n";
 }
 

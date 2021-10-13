@@ -1,6 +1,5 @@
 #pragma once
 #include "Posicion.h"
-
 #include <array>
 #include <cstdlib>
 #include <ctime>

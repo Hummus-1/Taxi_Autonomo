@@ -3,21 +3,19 @@
 Vehicle::Vehicle(int world_limit_x,int world_limit_y)
 {
    srand(time(NULL));
-   this->actual_position_.setX(rand()%world_limit_x);
-   this->actual_position_.setX(rand()%world_limit_y);
-   
+   this->position_.first = rand() % world_limit_x;
+   this->position_.second = rand() % world_limit_y;
+
 }
 
 Vehicle::Vehicle(Position position)
 {
-   this->actual_position_.setX(position.getX());
-   this->actual_position_.setY(position.getY());
+   position_ = position;
 }
 
-Vehicle::GetActualPosition()
-{
-    return this->actual_position_;
+Position Vehicle::GetPosition() {
+    return this->position_;
 }
-Vehicle::SetActualPosition(Position position){
-    actual_posicion_=position;
+void Vehicle::SetPosition(Position position){
+    this->position_ = position;
 }

@@ -1,16 +1,24 @@
 #include "Cell.h"
-/*Cell::Cell()
-{
-   this->in_use_=false;
-}
 
-Cell::Cell(in_use)
+Cell::Cell(Position position)
 {
-    this->in_use_=in_use;
+    this->position_=position;
+    this->empty_=false;
 }
-bool Cell::GetCell(){
-    return this->in_use_;
+Cell::Cell(Position position,bool in_use)
+{
+    this->position_=position;
+    this->empty_=in_use;
 }
-void Cell::GetActualPosition(bool in_use){
-    this->in_use_=in_use;
-}*/
+bool Cell::IsEmpty () {
+    return this->empty_;
+}
+void Cell::Change(){
+    this->empty_ = !empty_;
+}
+Position Cell::GetPosition(){
+    return this->position_;
+}
+void Cell::SetPosition(Position position){
+    this->position_=position;
+}

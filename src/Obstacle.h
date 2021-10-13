@@ -1,8 +1,8 @@
 #pragma once 
-
 #include <array>
 #include <cstdlib>
 #include <ctime>
+#include <utility>
 #include <errno.h>
 #include <iostream>
 #include <stdio.h>
@@ -13,13 +13,11 @@
 
 typedef std::pair<int, int> Position;
 
-class Vehicle{
+class Obstacle{
  private:
     Position position_;
  public:
-    Vehicle(int world_limit_x,int world_limit_y);
-    Vehicle(Position position);
+    Obstacle(Position position);
     Position GetPosition();
     void SetPosition(Position position);
-
 };

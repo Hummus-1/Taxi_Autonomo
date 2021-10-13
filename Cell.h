@@ -13,12 +13,15 @@
 
 typedef std::pair<int, int> Position;
 
-/*class Cell{
+class Cell{
  private:
-    bool in_use_;
+    bool empty_;
+    Position position_;
  public:
-    Cell();
-    Cell(bool in_use);
-    bool GetUse();
-    bool SetUse(bool in_use);
-};*/
+    Cell(Position position);
+    Cell(Position position, bool in_use);
+    bool IsEmpty();
+    void Change();
+    Position GetPosition();
+    void SetPosition(Position position);
+};
