@@ -32,3 +32,11 @@ std::shared_ptr<Object> Cell::GetObject() {
 void Cell::SetPosition(Position position) {
     this->position_ = position;
 }
+
+void Cell::MakeEmpty() {
+    if (!empty_) 
+        Change();
+}
+void Cell::SetObject(std::shared_ptr<Object> object) {
+    Change(object);
+}

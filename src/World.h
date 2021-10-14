@@ -29,6 +29,7 @@ class World {
     void AddObstacle(Position position);
     void GenerateObstacles(unsigned number);
     void AddVehicle(Position position);
+    void Reset(unsigned n, unsigned m);
     void Print();
   private:
     std::deque<std::deque<Cell> > world_;

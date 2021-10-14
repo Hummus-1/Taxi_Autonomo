@@ -22,7 +22,7 @@ void World::Resize(unsigned n, unsigned m) {
 }
 
 void World::AddObstacle(Position position) {
-  world_[position.first][position.second].Change(std::make_shared<Obstacle>(position));
+  world_[position.first][position.second].SetObject(std::make_shared<Obstacle>(position));
 }
 
 void World::GenerateObstacles(unsigned number) {
@@ -30,7 +30,7 @@ void World::GenerateObstacles(unsigned number) {
   for (unsigned i = 0; i < number; i++) {
     Position position = std::make_pair<int, int>(std::rand() % n_rows_, std::rand() % n_columns_);
     if (world_[position.first][position.second].IsEmpty()) {
-      world_[position.first][position.second].Change(std::make_shared<Obstacle>(position));
+      world_[position.first][position.second].SetObject(std::make_shared<Obstacle>(position));
     }
     else
       i--;
@@ -38,12 +38,26 @@ void World::GenerateObstacles(unsigned number) {
 }
 
 void World::AddVehicle(Position position) {
-  world_[position.first][position.second].Change(std::make_shared<Vehicle>(position));
+  world_[position.first][position.second].SetObject(std::make_shared<Vehicle>(position));
+}
+
+void World::Reset(unsigned n, unsigned m) {
+  assert(n > 2 && m > 2);
+  n_rows_ = n;
+  n_columns_ = m;
+  world_.resize(n_rows_);
+  for (unsigned i = 0; i < n; i++) {
+    world_[i].resize(n_columns_);
+    for (unsigned j = 0; j < m; j++) {
+      world_[i][j].SetPosition(std::make_pair<int, int>(i, j));
+      world_[i][j].MakeEmpty();
+    }
+  }
 }
 
 void World::Print() {
   std::cout << " ";
-  for (unsigned i = 0; i < n_rows_; i++) {
+  for (unsigned i = 0; i < n_columns_; i++) {
     std::cout << "_";
   }
   std::cout << "\n";
@@ -64,7 +78,7 @@ void World::Print() {
     }
   }
   std::cout << " ";
-  for (unsigned i = 0; i < n_rows_; i++) {
+  for (unsigned i = 0; i < n_columns_; i++) {
     std::cout << "-";
   }
   std::cout << "\n";

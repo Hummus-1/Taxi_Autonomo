@@ -62,7 +62,7 @@ void TerminalInput(World *world) {
   std::cout << "\nA continuación seleccione el modo de introducir los obstaculos:\n";
   std::cout << "Selecciones '0' para el modo aleatorio \n"; // no se si porner otra palabra
   std::cout << "Selecciones '1' para el modo manual \n";
-  world->Resize(n, m);
+  world->Reset(n, m);
   if (RequestBool())
     ManualObstacles(n, m, world);
   else
@@ -124,6 +124,7 @@ void Route(World* world) { // Hay que pasarle objeto mundo
   end.first = RequestInt(0, 100); // El maximo vendra definido por el objeto mundo
   std::cout << "Introduzca numero de columna: ";
   end.second = RequestInt(0, 100); // El maximo vendra definido por el objeto mundo
+  world->AddVehicle(start);
   world->Print();
   // GenerateRoute(start, end)
 }
@@ -197,13 +198,3 @@ void Welcome() {
   std::cout << "|                  ¡¡Bienvenido al taxi autonomo DAR!!             |\n";            
   std::cout << " ------------------------------------------------------------------\n";
 }
-
-/*int main () {
-  World world;
-  world.Resize(10, 10);
-  world.AddObstacle(std::make_pair<int, int>(2, 2));
-  world.AddVehicle(std::make_pair<int, int>(9, 9));
-  world.Print();
-  Welcome();
-  Menu();
-}*/
