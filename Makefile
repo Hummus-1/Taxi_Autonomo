@@ -8,10 +8,10 @@ CXXFLAGS = -std=c++14 -g -Wall
 LDFLAGS = 
 
 # Makefile settings - Can be customized.
-APPNAME = Taxi_Autónomo
-EXT = .cpp
-SRCDIR = /Users/dani/Documents/Github/Uni/Tercero/IA/Taxi_Autónomo/src
-OBJDIR = /Users/dani/Documents/Github/Uni/Tercero/IA/Taxi_Autónomo/build/objects
+APPNAME = Taxi_Autónomo.out
+EXT = .cc
+SRCDIR = /Users/dani/Documents/Github/Uni/Tercero/IA/Taxi_Autonomo/src
+OBJDIR = /Users/dani/Documents/Github/Uni/Tercero/IA/Taxi_Autonomo/build/objects
 
 ############## Do not change anything from here downwards! #############
 SRC = $(wildcard $(SRCDIR)/*$(EXT))
