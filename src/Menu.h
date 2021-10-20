@@ -12,7 +12,9 @@
 #include "World.h"
 #include "Cell.h"
 
+void InputTypeError();
 bool RequestBool();
+bool VerifyInt(int min, int max, int value);
 int RequestInt(int min, int max);
 void TerminalInput(World* world);
 void ManualObstacles(unsigned n, unsigned m, World* world);

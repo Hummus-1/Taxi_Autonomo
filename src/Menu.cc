@@ -1,52 +1,43 @@
 #include "Menu.h"
 
-bool RequestBool() {
-  try {
-    bool option; std::cin >> option;
-    if (!std::cin >> option) {
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-      throw "Argumento invalido";
-    }
-    return option;
-  }
-  catch(const char* error) {
-    std::cout << error << "\n";
-    return RequestBool();
-  }
-  catch (const std::invalid_argument& e) {
-    std::cout << e.what() << "\n";
-    return RequestBool();
-  }
+void InputTypeError() {
+  std::cin.clear();
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+  throw std::invalid_argument("Debe introducirse un numero");
+}
+
+bool VerifyInt(int min, int max, int value) {
+  if (!std::cin >> value)
+    InputTypeError();
+  if (value < min || value > max)
+    throw std::length_error("El valor '" + std::to_string(value) + "' debe estar dentro del rango " + std::to_string(min) + "-" + std::to_string(max));
+  return 1;
 }
 
 int RequestInt(int min, int max) {
   try {
     int value; std::cin >> value;
-    if (!std::cin >> value) {
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-      throw "Argumento invalido";
-    }
-    if (value < min || value > max)
-      throw "Valor introducido no valido";
+    VerifyInt(min, max, value);
     return value;
   }
-  catch(const char* error) {
-    std::cout << error << "\n";
-    std::cout << "El valor debe estar dentro del rango " << min << "-" << max << "\n";
+  catch(const std::invalid_argument& e) {
+    std::cout << "\033[31m" << "Argumento inválido. " << e.what() << "\033[0m" << "\n";
     return RequestInt(min, max);
   }
-  catch (const std::invalid_argument& e) {
-    std::cout << e.what() << "\n";
+  catch(const std::length_error& e) {
+    std::cout << "\033[33m" << e.what() << "\033[0m" << "\n";
     return RequestInt(min, max);
   }
 }
 
+bool RequestBool() {
+  return bool(RequestInt(0, 1));
+}
+
 void CreateEnvironment(World *world) {
   std::cout << "\n\nA continuación seleccione el modo de introducir los datos:\n";
-  std::cout << "Selecciones '0' para emplear la terminal\n";
-  std::cout << "Selecciones '1' para emplear un fichero de texto\n";
+  std::cout << "Selecciona '0' para emplear la terminal\n";
+  std::cout << "Selecciona '1' para emplear un fichero de texto\n";
   if (RequestBool())
     return FileInput(world);
   else
@@ -60,13 +51,14 @@ void TerminalInput(World *world) {
   std::cout << "A continuación introduce el ancho del entorno: ";
   int m = RequestInt(10, 1000);
   std::cout << "\nA continuación seleccione el modo de introducir los obstaculos:\n";
-  std::cout << "Selecciones '0' para el modo aleatorio \n"; // no se si porner otra palabra
-  std::cout << "Selecciones '1' para el modo manual \n";
+  std::cout << "Seleccione '0' para el modo aleatorio \n"; // no se si porner otra palabra
+  std::cout << "Seleccione '1' para el modo manual \n";
   world->Reset(n, m);
   if (RequestBool())
     ManualObstacles(n, m, world);
   else
     AutomaticObstacles(n, m, world);
+  std::cout << "\033[32m" << "Entorno creado satisfactoriamente\n" << "\033[0m";
 }
 
 void ManualObstacles(unsigned n, unsigned m, World* world) {
@@ -85,30 +77,52 @@ void ManualObstacles(unsigned n, unsigned m, World* world) {
 void AutomaticObstacles(unsigned n, unsigned m, World* world) {
   std::cout << "\nHa seleccionado el modo automático \n";
   std::cout << "Seleccione el porcentaje de obstáculos deseado: ";
-  world->GenerateObstacles(((n * m *RequestInt(0, 100)) / 100));
+  world->GenerateObstacles(((n * m * RequestInt(0, 100)) / 100));
 }
 
 void FileInput(World* world) {
   std::queue<int> file_data;
-  std::string dato;
-  std::cout << "Introduzca el nombre del archivo \n";
-  std::string input_filename="";
+  std::string dato, input_filename;
+  std::cout << "Introduzca el nombre del archivo: ";
   std::cin >> input_filename;
+  std::cin.clear();
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
   try {
     std::ifstream input_file(input_filename);
-    if (!input_file.is_open()) {
-      std::cerr << "Error al abrir el archivo \n"; 
-    }
+    if (!input_file.is_open())
+      throw std::ifstream::failure(input_filename);
     while (input_file >> dato) {
       if (!IsNumeric(dato))
-        throw "Alguno de los valores del archivo no son correctos";
+        throw std::invalid_argument(dato);
       file_data.push(stoi(dato));
     }
     input_file.close();
+  unsigned m = file_data.front();
+  file_data.pop();
+  unsigned n = file_data.front();
+  file_data.pop();
+  world->Reset(n, m);
+  if (file_data.front() == 0) {
+    file_data.pop();
+    VerifyInt(0, 100, file_data.front());
+    world->GenerateObstacles(((n * m * file_data.front()) / 100));
   }
-  catch(const char* error) {
-    std::cout << error << "\n";
-    return FileInput(world);
+  else if (file_data.front() == 1) {
+    file_data.pop();
+    //manual
+  }
+  else 
+    throw std::length_error("El valor de la línea 2 debe ser 0 o 1");
+  std::cout << "\033[32m" << "Entorno creado satisfactoriamente\n" << "\033[0m";
+  }
+  catch(const std::ifstream::failure& e) {
+    std::cout << "\033[31m" << "No se puedo abrir el archivo" << "\033[0m" << "\n";
+  }
+  catch (const std::length_error& e) {
+    std::cout << "\033[31m" << e.what() << "\033[0m" << "\n";
+  }
+  catch (const std::invalid_argument& e) {
+    std::cout << "\033[31m" << "El valor '" << e.what() << "' no está en el formato correcto" "\033[0m" << "\n";
   }
 }
 
@@ -158,13 +172,17 @@ void Help() {
 
 void Menu() {
   World menu_world;
+  /*FileInput(&menu_world);
+  menu_world.GenerateObstacles(20);
+  menu_world.AddVehicle(std::make_pair<int, int>(0, 0));
+  menu_world.Print();*/
   bool init {false};
   bool repeat {true};
   while (repeat) {
     MenuMessage();
     switch (RequestInt(1, 5)) {
         case 1:
-          CreateEnvironment(&menu_world); //error al crear uno despues de hacer otro
+          CreateEnvironment(&menu_world);
           init = true;
           break;
         case 2:
@@ -194,7 +212,8 @@ void Menu() {
 }
 
 void Welcome() {
-  std::cout << " ------------------------------------------------------------------\n";
-  std::cout << "|                  ¡¡Bienvenido al taxi autonomo DAR!!             |\n";            
-  std::cout << " ------------------------------------------------------------------\n";
+  // std::cout << " ------------------------------------------------------------------\n";
+  std::cout << "\033[5;1;34m" << "¡¡Bienvenido al taxi autonomo DAR!!" << "\033[0m"; 
+  std::cout << std::endl;           
+  // std::cout << " ------------------------------------------------------------------\n";
 }

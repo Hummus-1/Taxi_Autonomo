@@ -1,5 +1,5 @@
 #pragma once
-#include "Posicion.h"
+#include "Position.h"
 #include <array>
 #include <cstdlib>
 #include <ctime>
