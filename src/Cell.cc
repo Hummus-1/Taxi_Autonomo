@@ -29,6 +29,10 @@ std::shared_ptr<Object> Cell::GetObject() {
     return this->object_;
 }
 
+State* Cell::GetState() {
+    return &state_;
+}
+
 void Cell::SetPosition(Position position) {
     this->position_ = position;
 }

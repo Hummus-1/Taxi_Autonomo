@@ -17,6 +17,8 @@ bool RequestBool();
 bool VerifyInt(int min, int max, int value);
 int RequestInt(int min, int max);
 void TerminalInput(World* world);
+Position SelectVehicle(World* world);
+Position SelectGoal(World* world);
 void ManualObstacles(unsigned n, unsigned m, World* world);
 void AutomaticObstacles(unsigned n, unsigned m, World* world);
 void FileInput(World* world);

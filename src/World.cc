@@ -8,6 +8,20 @@ World::~World() {
   
 }
 
+void World::IsEmpty(Position position){
+  if (!GetCell(position)->IsEmpty())
+    throw std::overflow_error("Posición ocupaba");
+}
+
+Cell* World::GetCell(Position position){
+  try {
+    return &world_[position.first][position.second];
+  }
+  catch (const std::out_of_range& e) {
+    throw e;
+  }
+}
+
 void World::Resize(unsigned n, unsigned m) {
   assert(n > 2 && m > 2);
   n_rows_ = n;
@@ -22,7 +36,16 @@ void World::Resize(unsigned n, unsigned m) {
 }
 
 void World::AddObstacle(Position position) {
-  world_[position.first][position.second].SetObject(std::make_shared<Obstacle>(position));
+  try {
+    IsEmpty(position);
+    GetCell(position)->SetObject(std::make_shared<Obstacle>(position));
+  }
+  catch (const std::out_of_range& e) {
+    throw e;
+  }
+  catch (const std::overflow_error& e) {
+    throw e;
+  }
 }
 
 void World::GenerateObstacles(unsigned number) {
@@ -38,7 +61,33 @@ void World::GenerateObstacles(unsigned number) {
 }
 
 void World::AddVehicle(Position position) {
-  world_[position.first][position.second].SetObject(std::make_shared<Vehicle>(position));
+  try {
+    IsEmpty(position);
+    GetCell(position)->SetObject(std::make_shared<Vehicle>(position, GetCell(position)));
+  }
+  catch (const std::out_of_range& e) {
+    throw e;
+  }
+  catch (const std::overflow_error& e) {
+    throw e;
+  }
+}
+
+void World::AddGoal(Position position) {
+  try {
+    IsEmpty(position);
+    GetCell(position)->SetObject(std::make_shared<Goal>(position));
+  }
+  catch (const std::out_of_range& e) {
+    throw e;
+  }
+  catch (const std::overflow_error& e) {
+    throw e;
+  }
+}
+
+void World::StartRoute(Position start, Position end) {
+  GetCell(start)->GetState()->Enable(start, end);
 }
 
 void World::Reset(unsigned n, unsigned m) {
@@ -55,62 +104,31 @@ void World::Reset(unsigned n, unsigned m) {
   }
 }
 
+unsigned World::GetN() {
+  return n_rows_;
+}
+
+unsigned World::GetM() {
+  return n_columns_;
+}
+
 void World::Print() {
-  /*std::cout << " ";
-  for (unsigned i = 0; i < n_columns_; i++) {
-    std::cout << "_";
-  }*/
   std::cout << "\n";
   for (unsigned i = 0; i < n_rows_; i++) {
     for (unsigned j = 0; j < n_columns_; j++) {
-      /*if (j == 0)
-        std::cout << "|";*/
       if(!world_[i][j].IsEmpty()) {
-      if (dynamic_cast<Vehicle*>(world_[i][j].GetObject().get()) != 0)
-        std::cout << "\033[0;42m" << " " << "\033[0m";
-      else if (dynamic_cast<Obstacle*>(world_[i][j].GetObject().get()) != 0)
-        std::cout << "\033[0;44m" << " " << "\033[0m";
+        if (dynamic_cast<Vehicle*>(world_[i][j].GetObject().get()) != 0)
+          std::cout << "\033[0;42m" << " " << "\033[0m";
+        else if (dynamic_cast<Obstacle*>(world_[i][j].GetObject().get()) != 0)
+          std::cout << "\033[0;44m" << " " << "\033[0m";
+        else if (dynamic_cast<Goal*>(world_[i][j].GetObject().get()) != 0)
+          std::cout << "\033[0;41m" << " " << "\033[0m";
       }
       else
         std::cout << "\033[0;47m" << " " << "\033[0m";
-        //std::cout << "\u25A0";
       if (j == n_columns_ - 1)
         std::cout << "\n";
-        //std::cout << "| \n";
     }
-  }
-  /*std::cout << " ";
-  for (unsigned i = 0; i < n_columns_; i++) {
-    std::cout << "-";
-  }*/
-  std::cout << "\n";
-
-  
-  for (unsigned i = 0; i < (n_columns_ + 2); i++) {
-    std::cout << "\033[0;47m" << " " << "\033[0m";
-  }
-  std::cout << "\n";
-  for (unsigned i = 0; i < n_rows_; i++) {
-    for (unsigned j = 0; j < n_columns_; j++) {
-      if (j == 0)
-        std::cout << "\033[0;47m" << " " << "\033[0m";
-      if(!world_[i][j].IsEmpty()) {
-      if (dynamic_cast<Vehicle*>(world_[i][j].GetObject().get()) != 0)
-        std::cout << "\033[0;42m" << " " << "\033[0m";
-      else if (dynamic_cast<Obstacle*>(world_[i][j].GetObject().get()) != 0)
-        std::cout << "\033[0;44m" << " " << "\033[0m";
-      }
-      else
-        std::cout << "\033[0;49m" << " " << "\033[0m";
-        //std::cout << "\u25A0";
-      if (j == n_columns_ - 1) {
-        std::cout << "\033[0;47m" << " " << "\033[0m";
-        std::cout << "\n";
-      }
-    }
-  }
-  for (unsigned i = 0; i < (n_columns_ + 2); i++) {
-    std::cout << "\033[0;47m" << " " << "\033[0m";
   }
   std::cout << "\n";
 }

@@ -126,21 +126,46 @@ void FileInput(World* world) {
   }
 }
 
-void Route(World* world) { // Hay que pasarle objeto mundo
+Position SelectVehicle(World* world) {
+  Position start;
+  try {
+    std::cout << "A continuación deberá seleccionar la posición de inicio de la ruta \n";
+    std::cout << "Introduzca el numero de fila: ";
+    start.first = RequestInt(0, world->GetN());
+    std::cout << "Introduzca numero de columna: ";
+    start.second = RequestInt(0, world->GetM());
+    world->AddVehicle(start);
+  }
+  catch (const std::overflow_error& e) {
+    std::cout << "\033[31m" <<  "Posicion introducida ya ocupada\n" << "\033[0m";
+    SelectVehicle(world);
+  }
+  return start;
+}
+
+Position SelectGoal(World* world) {
+  Position end;
+  try {
+    std::cout << "A continuación deberá seleccionar la posición final de la ruta \n";
+    std::cout << "Introduzca el numero de fila: ";
+    end.first = RequestInt(0, world->GetN());
+    std::cout << "Introduzca numero de columna: ";
+    end.second = RequestInt(0, world->GetM());
+    world->AddGoal(end);
+  }
+  catch(const std::overflow_error& e){
+    std::cout << "\033[31m" <<  "Posicion introducida ya ocupada\n" << "\033[0m";
+    SelectGoal(world);
+  }
+  return end;
+}
+
+void Route(World* world) {
   Position start, end;
-  std::cout << "A continuación deberá seleccionar la posición de inicio de la ruta \n";
-  std::cout << "Introduzca el numero de fila: ";
-  start.first = RequestInt(0, 100); // El maximo vendra definido por el objeto mundo
-  std::cout << "Introduzca numero de columna: ";
-  start.second = RequestInt(0, 100); // El maximo vendra definido por el objeto mundo
-  std::cout << "A continuación deberá seleccionar la posición final de la ruta \n";
-  std::cout << "Introduzca el numero de fila: ";
-  end.first = RequestInt(0, 100); // El maximo vendra definido por el objeto mundo
-  std::cout << "Introduzca numero de columna: ";
-  end.second = RequestInt(0, 100); // El maximo vendra definido por el objeto mundo
-  world->AddVehicle(start);
+  start = SelectVehicle(world);
+  end = SelectGoal(world);
+  world->StartRoute(start, end);
   world->Print();
-  // GenerateRoute(start, end)
 }
 
 void MenuMessage() {
@@ -172,10 +197,6 @@ void Help() {
 
 void Menu() {
   World menu_world;
-  /*FileInput(&menu_world);
-  menu_world.GenerateObstacles(20);
-  menu_world.AddVehicle(std::make_pair<int, int>(0, 0));
-  menu_world.Print();*/
   bool init {false};
   bool repeat {true};
   while (repeat) {

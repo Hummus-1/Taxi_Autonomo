@@ -4,9 +4,8 @@
 #include <utility>
 #include <memory>
 
+#include "State.h"
 #include "Object.h"
-
-typedef std::pair<int, int> Position;
 
 class Cell {
   public:
@@ -19,12 +18,14 @@ class Cell {
 
     Position GetPosition();
     std::shared_ptr<Object> GetObject();
+    State* GetState();
 
     void SetPosition(Position position);
     void MakeEmpty();
     void SetObject(std::shared_ptr<Object> object);
   private:
     Position position_;
+    State state_;
     std::shared_ptr<Object> object_;
     bool empty_{true};
 

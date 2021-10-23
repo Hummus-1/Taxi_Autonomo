@@ -6,6 +6,7 @@ Lenguaje: C++
 
 */
 #pragma once
+
 #include <cstdlib>
 #include <deque>
 #include <fstream>
@@ -19,18 +20,30 @@ Lenguaje: C++
 #include "Cell.h"
 #include "Vehicle.h"
 #include "Obstacle.h"
+#include "Goal.h"
 
 class World {
   public:
     World() {}
     World(unsigned n, unsigned m);
     ~World();
-    void Resize(unsigned n, unsigned m);
+
+    void IsEmpty(Position position);
+    Cell* GetCell(Position position);
+
     void AddObstacle(Position position);
     void GenerateObstacles(unsigned number);
     void AddVehicle(Position position);
+    void AddGoal(Position position);
+    void StartRoute(Position start, Position end);
+
+    void Resize(unsigned n, unsigned m);
     void Reset(unsigned n, unsigned m);
+
+    unsigned GetN();
+    unsigned GetM();
     void Print();
+
   private:
     std::deque<std::deque<Cell> > world_;
     unsigned n_rows_;
