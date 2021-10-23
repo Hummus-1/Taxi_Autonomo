@@ -20,6 +20,7 @@ class Vehicle : public Object {
     Vehicle(Position position, Cell* cell) {this->position_ = position; cell_ = cell;}
     ~Vehicle() {}
     void SetPosition(Position position);
+    bool IsInGoal(Position position_f);
   private:
     Cell* cell_;
     std::vector<State*> states_queue_;

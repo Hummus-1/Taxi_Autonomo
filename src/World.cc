@@ -88,6 +88,29 @@ void World::AddGoal(Position position) {
 
 void World::StartRoute(Position start, Position end) {
   GetCell(start)->GetState()->Enable(start, end);
+  //while (!GetCell(start)->GetObject()->IsInGoal(end)) {
+  while(1) {
+    std::cout << "\n";
+    for (unsigned i = 0; i < n_rows_; i++) {
+      for (unsigned j = 0; j < n_columns_; j++) {
+        if(!world_[i][j].IsEmpty()) {
+          if (dynamic_cast<Vehicle*>(world_[i][j].GetObject().get()) != 0)
+            std::cout << "\033[0;42m" << " " << "\033[0m";
+          else if (dynamic_cast<Obstacle*>(world_[i][j].GetObject().get()) != 0)
+            std::cout << "\033[0;44m" << " " << "\033[0m";
+          else if (dynamic_cast<Goal*>(world_[i][j].GetObject().get()) != 0)
+            std::cout << "\033[0;41m" << " " << "\033[0m";
+        }
+        else
+          std::cout << "\033[0;47m" << " " << "\033[0m";
+        if (j == n_columns_ - 1)
+          std::cout << "\n";
+      }
+    }
+  std::cout << "\n";
+  // avanzar al siguiente estado
+  // Esperar unos milisegundos
+  }
 }
 
 void World::Reset(unsigned n, unsigned m) {

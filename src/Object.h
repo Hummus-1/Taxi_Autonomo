@@ -9,6 +9,7 @@ class Object {
     Object() {}
     Object(Position position);
     Position GetPosition();
+    virtual bool IsInGoal(Position position_f){return 1;}
     virtual ~Object() = default;
 
   protected:
