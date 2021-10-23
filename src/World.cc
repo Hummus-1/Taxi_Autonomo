@@ -88,8 +88,7 @@ void World::AddGoal(Position position) {
 
 void World::StartRoute(Position start, Position end) {
   GetCell(start)->GetState()->Enable(start, end);
-  //while (!GetCell(start)->GetObject()->IsInGoal(end)) {
-  while(1) {
+  while (!GetCell(start)->GetObject()->IsInGoal(end)) {
     std::cout << "\n";
     for (unsigned i = 0; i < n_rows_; i++) {
       for (unsigned j = 0; j < n_columns_; j++) {
