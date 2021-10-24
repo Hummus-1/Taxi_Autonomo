@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <utility>
+#include <vector>
 
 typedef std::pair<int, int> Position;
 
@@ -23,6 +24,4 @@ class State{
     bool GetVisited();
     bool GetProhibited();
     void MakeProhibited();
-    
-
 };

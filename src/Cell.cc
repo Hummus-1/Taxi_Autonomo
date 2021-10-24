@@ -18,7 +18,10 @@ bool Cell::IsEmpty () {
 
 void Cell::Change(std::shared_ptr<Object> object) {
     this->empty_ = !empty_;
-    this->object_ = move(object);
+    if (object == nullptr)
+        object_ = nullptr;
+    else
+        this->object_ = move(object);
 }
 
 Position Cell::GetPosition() {
@@ -27,6 +30,14 @@ Position Cell::GetPosition() {
 
 std::shared_ptr<Object> Cell::GetObject() {
     return this->object_;
+}
+
+void Cell::EnableState(Position end, Cell* previous_cell) {
+    if (previous_cell == nullptr) 
+        state_.Enable(position_, end);
+    else
+        state_.Enable(position_, end, previous_cell->GetState());
+
 }
 
 State* Cell::GetState() {

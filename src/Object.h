@@ -9,7 +9,9 @@ class Object {
     Object() {}
     Object(Position position);
     Position GetPosition();
-    virtual bool IsInGoal(Position position_f){return 1;}
+    virtual bool IsInGoal() {return 1;}
+    virtual void SetGoal(Position goal) {}
+    //virtual Position Move(void* to_vector) {return std::make_pair<int, int> (0, 0);}
     virtual ~Object() = default;
 
   protected:

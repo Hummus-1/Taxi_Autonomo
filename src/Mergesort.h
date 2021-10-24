@@ -9,3 +9,4 @@
 
 void Merge(std::vector<State*>& sequence, int ini, int centre, int end);
 void Msort(std::vector<State*>& sequence, int ini, int end);
+void Mergesort(std::vector<State*>& sequence);

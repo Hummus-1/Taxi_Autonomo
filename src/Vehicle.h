@@ -11,6 +11,7 @@
 #include <vector>
 
 #include "Object.h"
+#include "Mergesort.h"
 #include "Cell.h"
 
 typedef std::pair<int, int> Position;
@@ -20,8 +21,11 @@ class Vehicle : public Object {
     Vehicle(Position position, Cell* cell) {this->position_ = position; cell_ = cell;}
     ~Vehicle() {}
     void SetPosition(Position position);
-    bool IsInGoal(Position position_f);
+    void SetGoal(Position goal);
+    bool IsInGoal();
+    Position Move(std::vector<Cell*> adjacents);
   private:
     Cell* cell_;
+    Position goal_;
     std::vector<State*> states_queue_;
 };

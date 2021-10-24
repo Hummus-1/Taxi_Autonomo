@@ -21,6 +21,7 @@ Lenguaje: C++
 #include "Vehicle.h"
 #include "Obstacle.h"
 #include "Goal.h"
+#include "Direction.h"
 
 class World {
   public:
@@ -35,6 +36,7 @@ class World {
     void GenerateObstacles(unsigned number);
     void AddVehicle(Position position);
     void AddGoal(Position position);
+    std::vector<Cell*> GetAdjacent(Position position);
     void StartRoute(Position start, Position end);
 
     void Resize(unsigned n, unsigned m);

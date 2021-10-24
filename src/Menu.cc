@@ -197,6 +197,10 @@ void Help() {
 
 void Menu() {
   World menu_world;
+  menu_world.Resize(10, 10);
+  menu_world.AddVehicle(make_pair<int, int>(9, 9));
+  menu_world.AddGoal(make_pair<int, int>(9, 7));
+  menu_world.StartRoute(make_pair<int, int>(9, 9), make_pair<int, int>(9, 7));
   bool init {false};
   bool repeat {true};
   while (repeat) {

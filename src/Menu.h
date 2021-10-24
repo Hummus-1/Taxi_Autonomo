@@ -28,6 +28,3 @@ void MenuMessage();
 void Help();
 void Menu();
 void Welcome();
-/* includes al resto de archivos*/
-
-

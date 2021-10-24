@@ -9,13 +9,18 @@ World::~World() {
 }
 
 void World::IsEmpty(Position position){
-  if (!GetCell(position)->IsEmpty())
-    throw std::overflow_error("Posición ocupaba");
+  try {
+    if (!GetCell(position)->IsEmpty())
+      throw std::overflow_error("Posición ocupaba");
+  }
+  catch (const std::out_of_range& e) {
+    throw e;
+  }
 }
 
 Cell* World::GetCell(Position position){
   try {
-    return &world_[position.first][position.second];
+    return &world_.at(position.first).at(position.second);
   }
   catch (const std::out_of_range& e) {
     throw e;
@@ -86,10 +91,49 @@ void World::AddGoal(Position position) {
   }
 }
 
+std::vector<Cell*> World::GetAdjacent(Position position) {
+  Direction directions(position);
+  std::vector<Cell*> adjacents(0);
+  try {
+    IsEmpty(directions.GetDirectionUp());
+    adjacents.push_back(GetCell(directions.GetDirectionUp()));
+  }
+  catch (const std::out_of_range& e) {}
+  catch (const std::overflow_error& e) {}
+  try {
+    IsEmpty(directions.GetDirectionRight());
+    adjacents.push_back(GetCell(directions.GetDirectionRight()));
+  }
+  catch (const std::out_of_range& e) {}
+  catch (const std::overflow_error& e) {}
+  try {
+    IsEmpty(directions.GetDirectionLeft());
+    adjacents.push_back(GetCell(directions.GetDirectionLeft()));
+  }
+  catch (const std::out_of_range& e) {}
+  catch (const std::overflow_error& e) {}
+  try {
+    IsEmpty(directions.GetDirectionDown());
+    adjacents.push_back(GetCell(directions.GetDirectionDown()));
+  }
+  catch (const std::out_of_range& e) {}
+  catch (const std::overflow_error& e) {}
+  std::cout << "hola\n";
+  return adjacents;
+}
+
 void World::StartRoute(Position start, Position end) {
-  GetCell(start)->GetState()->Enable(start, end);
-  while (!GetCell(start)->GetObject()->IsInGoal(end)) {
-    std::cout << "\n";
+  GetCell(start)->GetObject()->SetGoal(end);
+  std::vector<Cell*> adjacents = GetAdjacent(start);
+  GetCell(start)->EnableState(end);
+  Position actual_position = start;
+  Print();
+  while (!GetCell(actual_position)->GetObject().get()->IsInGoal()) {
+  Vehicle* vehiculo = (Vehicle*)(GetCell(actual_position)->GetObject().get());
+  //GetCell(actual_position)->MakeEmpty();
+  actual_position = vehiculo->Move(GetAdjacent(actual_position));
+  //GetCell(actual_position)->SetObject(std::make_shared<object>(vehiculo));
+  std::cout << "\n";
     for (unsigned i = 0; i < n_rows_; i++) {
       for (unsigned j = 0; j < n_columns_; j++) {
         if(!world_[i][j].IsEmpty()) {
@@ -107,8 +151,6 @@ void World::StartRoute(Position start, Position end) {
       }
     }
   std::cout << "\n";
-  // avanzar al siguiente estado
-  // Esperar unos milisegundos
   }
 }
 

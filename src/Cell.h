@@ -18,6 +18,7 @@ class Cell {
 
     Position GetPosition();
     std::shared_ptr<Object> GetObject();
+    void EnableState(Position end, Cell* previous_cell = nullptr);
     State* GetState();
 
     void SetPosition(Position position);
