@@ -6,8 +6,11 @@
     
     int State::GetFn() {return fn_;}
 
+    State* State::GetPrevState() {return previous_state_;}
+
     void State::Enable(Position actual_pos, Position end, State* previous_state) {
       visited_ = 1;
+      position_ = actual_pos;
       if (previous_state != nullptr) {
         previous_state_ = previous_state;
         gn_ = previous_state_->GetGn() + 1;
@@ -16,8 +19,20 @@
       fn_ = gn_ + hn_;
     }
 
-    bool State::GetVisited() {return visited_;}
+    bool State::IsVisited() {return visited_;}
 
-    bool State::GetProhibited() {return prohibited_;}
+    bool State::IsRoute() {return route_;}
     
-    void State::MakeProhibited() {this->prohibited_ = 1;}
+    Position State::GetPosition() {return position_;}
+
+    void State::MakeRoute() {this->route_ = 1;}
+
+    void State::Reset() {
+      visited_ = 0;
+      route_ = 0;
+      previous_state_ = nullptr;
+      position_ = std::make_pair<int, int> (0, 0);
+      gn_= 0;
+      hn_ = 0;
+      fn_ = 0;
+    }

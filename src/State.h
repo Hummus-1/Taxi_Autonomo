@@ -9,9 +9,10 @@ typedef std::pair<int, int> Position;
 class State{
     private:
         bool visited_ = 0;
-        bool prohibited_ = 0;
+        bool route_ = 0;
         State* previous_state_ = nullptr;
 
+        Position position_;
         int gn_= 0;
         int hn_ = 0;
         int fn_ = 0;
@@ -21,7 +22,10 @@ class State{
     int GetGn();
     int GetHn();
     int GetFn();
-    bool GetVisited();
-    bool GetProhibited();
-    void MakeProhibited();
+    State* GetPrevState();
+    bool IsVisited();
+    bool IsRoute();
+    Position GetPosition();
+    void MakeRoute();
+    void Reset();
 };

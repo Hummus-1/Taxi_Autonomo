@@ -10,7 +10,7 @@ World::~World() {
 
 void World::IsEmpty(Position position){
   try {
-    if (!GetCell(position)->IsEmpty())
+    if (!GetCell(position)->IsEmpty() && dynamic_cast<Goal*>(GetCell(position)->GetObject()) == 0)
       throw std::overflow_error("Posición ocupaba");
   }
   catch (const std::out_of_range& e) {
@@ -43,7 +43,7 @@ void World::Resize(unsigned n, unsigned m) {
 void World::AddObstacle(Position position) {
   try {
     IsEmpty(position);
-    GetCell(position)->SetObject(std::make_shared<Obstacle>(position));
+    GetCell(position)->SetObject(new Obstacle(position));
   }
   catch (const std::out_of_range& e) {
     throw e;
@@ -58,7 +58,7 @@ void World::GenerateObstacles(unsigned number) {
   for (unsigned i = 0; i < number; i++) {
     Position position = std::make_pair<int, int>(std::rand() % n_rows_, std::rand() % n_columns_);
     if (world_[position.first][position.second].IsEmpty()) {
-      world_[position.first][position.second].SetObject(std::make_shared<Obstacle>(position));
+      world_[position.first][position.second].SetObject(new Obstacle(position));
     }
     else
       i--;
@@ -68,7 +68,7 @@ void World::GenerateObstacles(unsigned number) {
 void World::AddVehicle(Position position) {
   try {
     IsEmpty(position);
-    GetCell(position)->SetObject(std::make_shared<Vehicle>(position, GetCell(position)));
+    GetCell(position)->SetObject(new Vehicle(position, GetCell(position)));
   }
   catch (const std::out_of_range& e) {
     throw e;
@@ -81,7 +81,7 @@ void World::AddVehicle(Position position) {
 void World::AddGoal(Position position) {
   try {
     IsEmpty(position);
-    GetCell(position)->SetObject(std::make_shared<Goal>(position));
+    GetCell(position)->SetObject(new Goal(position));
   }
   catch (const std::out_of_range& e) {
     throw e;
@@ -118,7 +118,6 @@ std::vector<Cell*> World::GetAdjacent(Position position) {
   }
   catch (const std::out_of_range& e) {}
   catch (const std::overflow_error& e) {}
-  std::cout << "hola\n";
   return adjacents;
 }
 
@@ -128,22 +127,39 @@ void World::StartRoute(Position start, Position end) {
   GetCell(start)->EnableState(end);
   Position actual_position = start;
   Print();
-  while (!GetCell(actual_position)->GetObject().get()->IsInGoal()) {
-  Vehicle* vehiculo = (Vehicle*)(GetCell(actual_position)->GetObject().get());
+  while (!GetCell(actual_position)->GetObject()->IsInGoal()) {
+    Vehicle* vehiculo = (Vehicle*)(GetCell(actual_position)->GetObject());
+    GetCell(actual_position)->MakeEmpty();
   //GetCell(actual_position)->MakeEmpty();
-  actual_position = vehiculo->Move(GetAdjacent(actual_position));
+    try {
+      actual_position = vehiculo->Move(GetAdjacent(actual_position));
+    }
+    catch (const std::out_of_range& e) {
+      std::cout << "No hay forma de realizar la ruta escogida\n";
+      break;
+    }
+    GetCell(actual_position)->MakeEmpty();
+    GetCell(actual_position)->SetObject((Object*)vehiculo);
+    vehiculo->SetCell(GetCell(actual_position));
+    //setcell??
   //GetCell(actual_position)->SetObject(std::make_shared<object>(vehiculo));
+  if (GetCell(actual_position)->GetObject()->IsInGoal()) {
+    vehiculo->Finished();
   std::cout << "\n";
     for (unsigned i = 0; i < n_rows_; i++) {
       for (unsigned j = 0; j < n_columns_; j++) {
         if(!world_[i][j].IsEmpty()) {
-          if (dynamic_cast<Vehicle*>(world_[i][j].GetObject().get()) != 0)
+          if (dynamic_cast<Vehicle*>(world_[i][j].GetObject()) != 0)
             std::cout << "\033[0;42m" << " " << "\033[0m";
-          else if (dynamic_cast<Obstacle*>(world_[i][j].GetObject().get()) != 0)
+          else if (dynamic_cast<Obstacle*>(world_[i][j].GetObject()) != 0)
             std::cout << "\033[0;44m" << " " << "\033[0m";
-          else if (dynamic_cast<Goal*>(world_[i][j].GetObject().get()) != 0)
+          else if (dynamic_cast<Goal*>(world_[i][j].GetObject()) != 0)
             std::cout << "\033[0;41m" << " " << "\033[0m";
         }
+        else if (world_[i][j].GetState()->IsRoute())
+          std::cout << "\033[0;43m" << " " << "\033[0m";
+        else if (world_[i][j].GetState()->IsVisited())
+            std::cout << "\033[0;45m" << " " << "\033[0m";
         else
           std::cout << "\033[0;47m" << " " << "\033[0m";
         if (j == n_columns_ - 1)
@@ -151,6 +167,8 @@ void World::StartRoute(Position start, Position end) {
       }
     }
   std::cout << "\n";
+  std::cout << "G(n) = " << GetCell(actual_position)->GetState()->GetGn() << "\n";
+  }
   }
 }
 
@@ -162,8 +180,8 @@ void World::Reset(unsigned n, unsigned m) {
   for (unsigned i = 0; i < n; i++) {
     world_[i].resize(n_columns_);
     for (unsigned j = 0; j < m; j++) {
+      world_[i][j].Reset();
       world_[i][j].SetPosition(std::make_pair<int, int>(i, j));
-      world_[i][j].MakeEmpty();
     }
   }
 }
@@ -181,11 +199,11 @@ void World::Print() {
   for (unsigned i = 0; i < n_rows_; i++) {
     for (unsigned j = 0; j < n_columns_; j++) {
       if(!world_[i][j].IsEmpty()) {
-        if (dynamic_cast<Vehicle*>(world_[i][j].GetObject().get()) != 0)
+        if (dynamic_cast<Vehicle*>(world_[i][j].GetObject()) != 0)
           std::cout << "\033[0;42m" << " " << "\033[0m";
-        else if (dynamic_cast<Obstacle*>(world_[i][j].GetObject().get()) != 0)
+        else if (dynamic_cast<Obstacle*>(world_[i][j].GetObject()) != 0)
           std::cout << "\033[0;44m" << " " << "\033[0m";
-        else if (dynamic_cast<Goal*>(world_[i][j].GetObject().get()) != 0)
+        else if (dynamic_cast<Goal*>(world_[i][j].GetObject()) != 0)
           std::cout << "\033[0;41m" << " " << "\033[0m";
       }
       else

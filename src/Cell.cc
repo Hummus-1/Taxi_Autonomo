@@ -6,29 +6,29 @@ Cell::Cell(Position position) {
     this->object_= nullptr;
 }
 
-Cell::Cell(Position position, std::shared_ptr<Object> object) {
+Cell::Cell(Position position, Object* object) {
     this->position_ = position;
     this->empty_ = false;
-    this->object_ = move(object);
+    this->object_ = object;
 }
 
 bool Cell::IsEmpty () {
     return this->empty_;
 }
 
-void Cell::Change(std::shared_ptr<Object> object) {
+void Cell::Change(Object* object) {
     this->empty_ = !empty_;
     if (object == nullptr)
-        object_ = nullptr;
+        this->object_ = nullptr;
     else
-        this->object_ = move(object);
+        this->object_ = object;
 }
 
 Position Cell::GetPosition() {
     return this->position_;
 }
 
-std::shared_ptr<Object> Cell::GetObject() {
+Object* Cell::GetObject() {
     return this->object_;
 }
 
@@ -52,6 +52,14 @@ void Cell::MakeEmpty() {
     if (!empty_) 
         Change();
 }
-void Cell::SetObject(std::shared_ptr<Object> object) {
+
+void Cell::Reset() {
+    MakeEmpty();
+    state_.Reset();
+    position_ = std::make_pair<int, int>(0, 0);
+    empty_ = true;
+}
+
+void Cell::SetObject(Object* object) {
     Change(object);
 }

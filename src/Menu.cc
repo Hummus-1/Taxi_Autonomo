@@ -82,11 +82,11 @@ void AutomaticObstacles(unsigned n, unsigned m, World* world) {
 
 void FileInput(World* world) {
   std::queue<int> file_data;
-  std::string dato, input_filename;
+  std::string dato, input_filename = "ej.txt";
   std::cout << "Introduzca el nombre del archivo: ";
-  std::cin >> input_filename;
-  std::cin.clear();
-  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+  //std::cin >> input_filename;
+  //std::cin.clear();
+  //std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
   try {
     std::ifstream input_file(input_filename);
     if (!input_file.is_open())
@@ -109,7 +109,15 @@ void FileInput(World* world) {
   }
   else if (file_data.front() == 1) {
     file_data.pop();
-    //manual
+    Position obstacle;
+    for (unsigned i = file_data.front(); i > 0; i--) {
+      file_data.pop();
+      obstacle.first = file_data.front();
+      file_data.pop();
+      obstacle.second = file_data.front();
+      world->AddObstacle(obstacle);
+    }
+    file_data.pop();
   }
   else 
     throw std::length_error("El valor de la línea 2 debe ser 0 o 1");
@@ -165,7 +173,6 @@ void Route(World* world) {
   start = SelectVehicle(world);
   end = SelectGoal(world);
   world->StartRoute(start, end);
-  world->Print();
 }
 
 void MenuMessage() {
@@ -197,10 +204,10 @@ void Help() {
 
 void Menu() {
   World menu_world;
-  menu_world.Resize(10, 10);
-  menu_world.AddVehicle(make_pair<int, int>(9, 9));
-  menu_world.AddGoal(make_pair<int, int>(9, 7));
-  menu_world.StartRoute(make_pair<int, int>(9, 9), make_pair<int, int>(9, 7));
+  FileInput(&menu_world);
+  menu_world.AddVehicle(make_pair<int, int>(3, 0));
+  menu_world.AddGoal(make_pair<int, int>(0, 0));
+  menu_world.StartRoute(make_pair<int, int>(3, 0), make_pair<int, int>(0, 0));
   bool init {false};
   bool repeat {true};
   while (repeat) {
