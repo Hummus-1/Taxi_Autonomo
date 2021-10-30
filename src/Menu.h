@@ -12,18 +12,15 @@
 #include "World.h"
 #include "Cell.h"
 
-void InputTypeError();
-bool RequestBool();
-bool VerifyInt(int min, int max, int value);
-int RequestInt(int min, int max);
 void TerminalInput(World* world);
 Position SelectVehicle(World* world);
 Position SelectGoal(World* world);
 void ManualObstacles(unsigned n, unsigned m, World* world);
 void AutomaticObstacles(unsigned n, unsigned m, World* world);
-void FileInput(World* world);
+void FileInput(World* world, std::string filename = "");
 void Route(World* world);
 void CreateEnvironment(World* world);
+void ExportWorld(World* world);
 void MenuMessage();
 void Help();
 void Menu();

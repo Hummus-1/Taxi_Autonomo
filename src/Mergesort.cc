@@ -4,7 +4,7 @@ void Merge(std::vector<State*>& sequence, int ini, int centre, int end) {
   std::vector<State*> aux = sequence;
   unsigned i = ini ; unsigned j = centre + 1 ; unsigned k = ini;
   while ((i <= centre) && (j <= end)) {
-    if (sequence[i]->GetFn() < sequence[j]->GetFn()) {
+    if ((sequence[i]->GetFn() < sequence[j]->GetFn()) || ((sequence[i]->GetFn() == sequence[j]->GetFn()) && sequence[i]->GetGn() > sequence[j]->GetGn())) {
       aux[k] = sequence[i];
       i++;
     }

@@ -9,6 +9,7 @@
 #include <string>
 #include <unistd.h>
 #include <vector>
+#include <time.h>
 
 #include "Object.h"
 #include "Mergesort.h"
@@ -25,9 +26,16 @@ class Vehicle : public Object {
     void SetGoal(Position goal);
     bool IsInGoal();
     Position Move(std::vector<Cell*> adjacents);
+    bool IsFinished();
     void Finished();
+    unsigned GetVisitedCells();
+    unsigned GetExploredCells();
   private:
     Cell* cell_;
     Position goal_;
+    State* best_goal_ = nullptr;
     std::vector<State*> states_queue_;
+    unsigned visited_cells_{0};
+    unsigned explored_cells_{0};
+    double t_merge_ac = 0.0;
 };

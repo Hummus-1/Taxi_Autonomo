@@ -1,15 +1,18 @@
-/*
-AUTOR: Daniel García Hernández
-EMAIL: alu0101353340@ull.edu.es
-*/
-
 #pragma once
 
 #include <iostream>
 #include <vector>
+#include <limits>
 #include <string>
+#include <queue>
+#include <fstream>
 
-using namespace std;
-
-vector<string> split(const string str, const unsigned splits);
-bool IsNumeric(string str);
+std::vector<std::string> split(const std::string str, const unsigned splits);
+bool IsNumeric(std::string str);
+void InputTypeError();
+bool RequestBool();
+std::string RequestString();
+bool VerifyInt(int min, int max, int value);
+int RequestInt(int min, int max);
+std::queue<int> ReadFile(std::string filename = "");
+std::fstream OpenFile(std::string filename = "");

@@ -1,7 +1,8 @@
 #include "World.h"
 
 World::World(unsigned n, unsigned m) {
-
+  n_rows_ = n;
+  n_columns_ = m;
 }
 
 World::~World() {
@@ -16,6 +17,13 @@ void World::IsEmpty(Position position){
   catch (const std::out_of_range& e) {
     throw e;
   }
+}
+
+bool World::IsObstacle(Position position) {
+  if (dynamic_cast<Obstacle*>(GetCell(position)->GetObject()) != 0)
+    return true;
+  else
+    return false;
 }
 
 Cell* World::GetCell(Position position){
@@ -44,6 +52,7 @@ void World::AddObstacle(Position position) {
   try {
     IsEmpty(position);
     GetCell(position)->SetObject(new Obstacle(position));
+    n_obstacles_ += 1;
   }
   catch (const std::out_of_range& e) {
     throw e;
@@ -63,6 +72,7 @@ void World::GenerateObstacles(unsigned number) {
     else
       i--;
   }
+  n_obstacles_ += number;
 }
 
 void World::AddVehicle(Position position) {
@@ -92,6 +102,7 @@ void World::AddGoal(Position position) {
 }
 
 std::vector<Cell*> World::GetAdjacent(Position position) {
+  clock_t t_adj = clock();
   Direction directions(position);
   std::vector<Cell*> adjacents(0);
   try {
@@ -118,6 +129,7 @@ std::vector<Cell*> World::GetAdjacent(Position position) {
   }
   catch (const std::out_of_range& e) {}
   catch (const std::overflow_error& e) {}
+  t_adj_ac += (double)(clock() - t_adj)/CLOCKS_PER_SEC;
   return adjacents;
 }
 
@@ -126,56 +138,50 @@ void World::StartRoute(Position start, Position end) {
   std::vector<Cell*> adjacents = GetAdjacent(start);
   GetCell(start)->EnableState(end);
   Position actual_position = start;
-  Print();
-  while (!GetCell(actual_position)->GetObject()->IsInGoal()) {
-    Vehicle* vehiculo = (Vehicle*)(GetCell(actual_position)->GetObject());
+  clock_t t_start = clock();
+  double t_pre_ac, t_move_ac;
+  Vehicle* vehiculo;
+  while (1) {
+    clock_t t_pre = clock();
+    vehiculo = (Vehicle*)(GetCell(actual_position)->GetObject());
     GetCell(actual_position)->MakeEmpty();
-  //GetCell(actual_position)->MakeEmpty();
+    t_pre_ac += (double)(clock() - t_pre)/CLOCKS_PER_SEC;
     try {
+      clock_t t_move = clock();
       actual_position = vehiculo->Move(GetAdjacent(actual_position));
+      t_move_ac += (double)(clock() - t_move)/CLOCKS_PER_SEC;
+
     }
     catch (const std::out_of_range& e) {
+      Print();
       std::cout << "No hay forma de realizar la ruta escogida\n";
       break;
     }
     GetCell(actual_position)->MakeEmpty();
     GetCell(actual_position)->SetObject((Object*)vehiculo);
     vehiculo->SetCell(GetCell(actual_position));
-    //setcell??
-  //GetCell(actual_position)->SetObject(std::make_shared<object>(vehiculo));
-  if (GetCell(actual_position)->GetObject()->IsInGoal()) {
-    vehiculo->Finished();
-  std::cout << "\n";
-    for (unsigned i = 0; i < n_rows_; i++) {
-      for (unsigned j = 0; j < n_columns_; j++) {
-        if(!world_[i][j].IsEmpty()) {
-          if (dynamic_cast<Vehicle*>(world_[i][j].GetObject()) != 0)
-            std::cout << "\033[0;42m" << " " << "\033[0m";
-          else if (dynamic_cast<Obstacle*>(world_[i][j].GetObject()) != 0)
-            std::cout << "\033[0;44m" << " " << "\033[0m";
-          else if (dynamic_cast<Goal*>(world_[i][j].GetObject()) != 0)
-            std::cout << "\033[0;41m" << " " << "\033[0m";
-        }
-        else if (world_[i][j].GetState()->IsRoute())
-          std::cout << "\033[0;43m" << " " << "\033[0m";
-        else if (world_[i][j].GetState()->IsVisited())
-            std::cout << "\033[0;45m" << " " << "\033[0m";
-        else
-          std::cout << "\033[0;47m" << " " << "\033[0m";
-        if (j == n_columns_ - 1)
-          std::cout << "\n";
-      }
-    }
-  std::cout << "\n";
-  std::cout << "G(n) = " << GetCell(actual_position)->GetState()->GetGn() << "\n";
+    if (vehiculo->IsFinished()) {
+      vehiculo->Finished();
+      Print();
+      std::cout << "El coste del camino mínimo es: " << GetCell(actual_position)->GetState()->GetGn() << "\n";
+      break;
   }
   }
+  std::cout << "Se han visitado " << vehiculo->GetVisitedCells() << " casillas\n";
+  std::cout << "Se han explorado " << vehiculo->GetExploredCells() << " casillas\n";
+  std::cout << "El tiempo de ejecución ha sido de: " << (double)(clock() - t_start)/CLOCKS_PER_SEC << " segundos \n";
+  std::cout << "T por visita = " << t_move_ac/vehiculo->GetVisitedCells() << "\n";
+  std::cout << "T por adj = " << t_adj_ac/vehiculo->GetVisitedCells() << "\n";
+  std::cout << "El tiempo medio por estado ha sido de: " << ((double)(clock() - t_start)/CLOCKS_PER_SEC)/(double)(vehiculo->GetVisitedCells()) << " segundos \n";
 }
 
 void World::Reset(unsigned n, unsigned m) {
-  assert(n > 2 && m > 2);
-  n_rows_ = n;
-  n_columns_ = m;
+  if (n != 0 && m != 0) {
+    n_rows_ = n;
+    n_columns_ = m;
+  }
+  assert(n_rows_ > 2 && n_columns_ > 2);
+  n_obstacles_ = 0;
   world_.resize(n_rows_);
   for (unsigned i = 0; i < n; i++) {
     world_[i].resize(n_columns_);
@@ -194,6 +200,10 @@ unsigned World::GetM() {
   return n_columns_;
 }
 
+unsigned World::GetNumberOfObstacles() {
+  return n_obstacles_;
+}
+
 void World::Print() {
   std::cout << "\n";
   for (unsigned i = 0; i < n_rows_; i++) {
@@ -206,6 +216,10 @@ void World::Print() {
         else if (dynamic_cast<Goal*>(world_[i][j].GetObject()) != 0)
           std::cout << "\033[0;41m" << " " << "\033[0m";
       }
+      else if (world_[i][j].GetState()->IsRoute())
+        std::cout << "\033[0;43m" << " " << "\033[0m";
+      else if (world_[i][j].GetState()->IsVisited())
+        std::cout << "\033[0;45m" << " " << "\033[0m";
       else
         std::cout << "\033[0;47m" << " " << "\033[0m";
       if (j == n_columns_ - 1)

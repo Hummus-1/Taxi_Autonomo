@@ -22,6 +22,7 @@ class Cell {
     State* GetState();
 
     void SetPosition(Position position);
+    void SetState(State state) {state_ = state; }
     void MakeEmpty();
     void SetObject(Object* object);
     void Reset();

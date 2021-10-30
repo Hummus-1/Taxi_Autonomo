@@ -1,5 +1,9 @@
     #include "State.h"
 
+    State::State(Position actual_pos, Position end, State* previous_state) {
+      //Enable(actual_pos, end, previous_state);
+    }
+
     int State::GetGn() {return gn_;}
 
     int State::GetHn() {return hn_;}
@@ -9,7 +13,8 @@
     State* State::GetPrevState() {return previous_state_;}
 
     void State::Enable(Position actual_pos, Position end, State* previous_state) {
-      visited_ = 1;
+      if (explored_ == 0 || ((previous_state->GetGn() + 1 + abs(end.first - actual_pos.first) + abs(end.second - actual_pos.second)) < fn_)) {
+      explored_ = 1;
       position_ = actual_pos;
       if (previous_state != nullptr) {
         previous_state_ = previous_state;
@@ -17,9 +22,12 @@
       }
       hn_ = abs(end.first - actual_pos.first) + abs(end.second - actual_pos.second);
       fn_ = gn_ + hn_;
+      }
     }
 
     bool State::IsVisited() {return visited_;}
+
+    bool State::IsExplored() {return explored_;}
 
     bool State::IsRoute() {return route_;}
     

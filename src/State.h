@@ -8,6 +8,7 @@ typedef std::pair<int, int> Position;
 
 class State{
     private:
+        bool explored_ = 0;
         bool visited_ = 0;
         bool route_ = 0;
         State* previous_state_ = nullptr;
@@ -18,14 +19,18 @@ class State{
         int fn_ = 0;
 
     public:
+        State() {}
+        State(Position actual_pos, Position end, State* previous_state = nullptr);
         void Enable(Position actual_pos, Position end, State* previous_state = nullptr);
-    int GetGn();
-    int GetHn();
-    int GetFn();
-    State* GetPrevState();
-    bool IsVisited();
-    bool IsRoute();
-    Position GetPosition();
-    void MakeRoute();
-    void Reset();
+        int GetGn();
+        int GetHn();
+        int GetFn();
+        State* GetPrevState();
+        bool IsExplored();
+        bool IsVisited();
+        bool IsRoute();
+        Position GetPosition();
+        void MakeVisited() {visited_ = true;}
+        void MakeRoute();
+        void Reset();
 };
