@@ -10,7 +10,7 @@
 #include <unistd.h>
 #include <vector>
 #include <time.h>
-#include <queue>
+#include <list>
 #include "Object.h"
 #include "Mergesort.h"
 #include "Cell.h"
@@ -34,7 +34,8 @@ class Vehicle : public Object {
     Cell* cell_;
     Position goal_;
     State* best_goal_ = nullptr;
-    std::vector<State*> states_queue_;
+    std::list<State*> states_queue_;
+    //std::vector<State*> states_queue_;
     unsigned visited_cells_{0};
     unsigned explored_cells_{0};
     double t_merge_ac = 0.0;

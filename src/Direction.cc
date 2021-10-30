@@ -3,15 +3,24 @@
 Direction::Direction()
 {
     this->direction_.push_back(Position(0, 1));
+    this->direction_.push_back(Position(1, 1));
     this->direction_.push_back(Position(1, 0));
+    this->direction_.push_back(Position(1, -1));
     this->direction_.push_back(Position(0, -1));
+    this->direction_.push_back(Position(-1, -1));
     this->direction_.push_back(Position(-1, 0));
+    this->direction_.push_back(Position(-1, 1));
+    
 }
 Direction::Direction(Position actual_cell){
     this->direction_.push_back(Position(0, 1));
+    this->direction_.push_back(Position(1, 1));
     this->direction_.push_back(Position(1, 0));
+    this->direction_.push_back(Position(1, -1));
     this->direction_.push_back(Position(0, -1));
+    this->direction_.push_back(Position(-1, -1));
     this->direction_.push_back(Position(-1, 0));
+    this->direction_.push_back(Position(-1, 1));
     this->actual_cell_=actual_cell;
 }
 

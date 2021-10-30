@@ -42,3 +42,7 @@ void Msort(std::vector<State*>& sequence, int ini, int end) {
 void Mergesort(std::vector<State*>& sequence) {
   Msort(sequence, 0, sequence.size() - 1);
 }
+
+bool compare(const State* state_1, const State* state_2) {
+  return (state_1->GetFn() > state_2->GetFn()) || (((state_1->GetFn() == state_2->GetFn()) && state_1->GetGn() > state_2->GetGn()));
+}

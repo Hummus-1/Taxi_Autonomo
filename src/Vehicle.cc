@@ -27,31 +27,34 @@ Position Vehicle::Move(std::vector<Cell*> adjacents) {
     for (unsigned i = 0; i < adjacents.size(); i++) {
         if (!adjacents.at(i)->GetState()->IsVisited()) {
             if (!adjacents.at(i)->GetState()->IsExplored()) {
-            states_queue_.push_back(adjacents.at(i)->GetState());
-            explored_cells_++;
+                states_queue_.push_back(adjacents.at(i)->GetState());
+                explored_cells_++;
             }
             adjacents.at(i)->EnableState(goal_, cell_);
             //std::cout << explored_cells_ << " ";
         }
     }
     clock_t t_merge = clock();
-    Mergesort(states_queue_);
+    states_queue_.sort(compare);
+    //Mergesort(states_queue_);
     t_merge_ac += (double)(clock() - t_merge)/CLOCKS_PER_SEC;
-    position_ = states_queue_.at(0)->GetPosition();
+    if (states_queue_.empty())
+        throw std::out_of_range("No candidates");
+    position_ = states_queue_.back()->GetPosition();
     if (IsInGoal()) {
         if (best_goal_ == nullptr)
-            best_goal_ = states_queue_.at(0);
-        else if (best_goal_->GetGn() > states_queue_.at(0)->GetGn())
-            best_goal_ = states_queue_.at(0); 
+            best_goal_ = states_queue_.back();
+        else if (best_goal_->GetGn() > states_queue_.back()->GetGn())
+            best_goal_ = states_queue_.back(); 
     }
-    states_queue_.erase(states_queue_.begin());
+    states_queue_.pop_back();
     visited_cells_++;
     //std::cout << "*" << visited_cells_ << "*" << std::endl;
     return position_;
 }
 
 bool Vehicle::IsFinished() {
-    if (IsInGoal() && (states_queue_.empty() || (best_goal_->GetGn() <= states_queue_[0]->GetFn()) )) 
+    if (IsInGoal() && (states_queue_.empty() || (best_goal_->GetGn() <= states_queue_.back()->GetFn()) )) 
         return 1;
     else
         return 0;
@@ -70,3 +73,6 @@ void Vehicle::Finished() {
 unsigned Vehicle::GetVisitedCells() {return visited_cells_;}
 
 unsigned Vehicle::GetExploredCells() {return explored_cells_;}
+
+
+    

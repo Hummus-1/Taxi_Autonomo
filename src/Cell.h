@@ -25,6 +25,7 @@ class Cell {
     void SetState(State state) {state_ = state; }
     void MakeEmpty();
     void SetObject(Object* object);
+    void ResetState() {State empty_state; state_ = empty_state;}
     void Reset();
     
   private:

@@ -165,20 +165,20 @@ void Help() {
 
 void Menu() {
   World menu_world;
-  /*FileInput(&menu_world, "ej.txt");
-  menu_world.AddVehicle(std::make_pair<int, int>(0, 0));
-  menu_world.AddGoal(std::make_pair<int, int>(29, 29));
-  menu_world.StartRoute(std::make_pair<int, int>(0, 0), std::make_pair<int, int>(29, 29)); 
-  menu_world.Reset();*/
-  FileInput(&menu_world, "ExportedWorld_1.txt");
+  /*FileInput(&menu_world, "ExportedWorld_1.txt");
   menu_world.AddVehicle(std::make_pair<int, int>(9, 9));
   menu_world.AddGoal(std::make_pair<int, int>(99, 99));
   menu_world.StartRoute(std::make_pair<int, int>(9, 9), std::make_pair<int, int>(99, 99));
-  menu_world.Reset();
+  menu_world.Reset();*/
   /*FileInput(&menu_world, "ExportedWorld.txt");
-  menu_world.AddVehicle(std::make_pair<int, int>(1, 1));
-  menu_world.AddGoal(std::make_pair<int, int>(20, 20));
-  menu_world.StartRoute(std::make_pair<int, int>(1, 1), std::make_pair<int, int>(20, 20));
+  menu_world.AddVehicle(std::make_pair<int, int>(0, 0));
+  menu_world.AddGoal(std::make_pair<int, int>(199, 198));
+  menu_world.StartRoute(std::make_pair<int, int>(0, 0), std::make_pair<int, int>(199, 198));
+  menu_world.Reset();*/
+  FileInput(&menu_world, "ExportedWorld.txt");
+  menu_world.AddVehicle(std::make_pair<int, int>(0, 0));
+  menu_world.AddGoal(std::make_pair<int, int>(9, 9));
+  menu_world.StartRoute(std::make_pair<int, int>(0, 0), std::make_pair<int, int>(9, 9));
   menu_world.Reset();
   /*menu_world.AddVehicle(std::make_pair<int, int>(4, 4));
   menu_world.AddGoal(std::make_pair<int, int>(299, 10));

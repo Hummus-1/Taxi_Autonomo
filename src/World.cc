@@ -183,9 +183,9 @@ void World::Reset(unsigned n, unsigned m) {
   assert(n_rows_ > 2 && n_columns_ > 2);
   n_obstacles_ = 0;
   world_.resize(n_rows_);
-  for (unsigned i = 0; i < n; i++) {
+  for (unsigned i = 0; i < n_rows_; i++) {
     world_[i].resize(n_columns_);
-    for (unsigned j = 0; j < m; j++) {
+    for (unsigned j = 0; j < n_columns_; j++) {
       world_[i][j].Reset();
       world_[i][j].SetPosition(std::make_pair<int, int>(i, j));
     }

@@ -4,11 +4,11 @@
       //Enable(actual_pos, end, previous_state);
     }
 
-    int State::GetGn() {return gn_;}
+    int State::GetGn() const {return gn_;}
 
     int State::GetHn() {return hn_;}
     
-    int State::GetFn() {return fn_;}
+    int State::GetFn() const {return fn_;}
 
     State* State::GetPrevState() {return previous_state_;}
 
@@ -36,6 +36,7 @@
     void State::MakeRoute() {this->route_ = 1;}
 
     void State::Reset() {
+      explored_ = 0;
       visited_ = 0;
       route_ = 0;
       previous_state_ = nullptr;
