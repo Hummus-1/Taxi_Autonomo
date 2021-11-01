@@ -37,16 +37,17 @@ class World {
     void GenerateObstacles(unsigned number);
     void AddVehicle(Position position);
     void AddGoal(Position position);
-    void StartRoute(Position start, Position end);
+    void StartRoute(Position start, Position end, bool heuristic_mode, bool adjacent_mode);
 
     void Resize(unsigned n, unsigned m);
+    void Clear();
     void Reset(unsigned n = 0, unsigned m = 0);
 
     unsigned GetN();
     unsigned GetM();
     unsigned GetNumberOfObstacles();
     Cell* GetCell(Position position);
-    std::vector<Cell*> GetAdjacent(Position position);
+    std::vector<Cell*> GetAdjacent(Position position, bool adjacent_mode);
     void Print();
 
   private:
@@ -54,5 +55,4 @@ class World {
     unsigned n_rows_;
     unsigned n_columns_;
     unsigned n_obstacles_{0};
-    double t_adj_ac = 0.0;
 };

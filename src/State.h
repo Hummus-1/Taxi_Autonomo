@@ -3,10 +3,11 @@
 #include <iostream>
 #include <utility>
 #include <vector>
+#include <cmath>
 
 typedef std::pair<int, int> Position;
 
-class State{
+class State {
     private:
         bool explored_ = 0;
         bool visited_ = 0;
@@ -20,8 +21,8 @@ class State{
 
     public:
         State() {}
-        State(Position actual_pos, Position end, State* previous_state = nullptr);
-        void Enable(Position actual_pos, Position end, State* previous_state = nullptr);
+        void RectilinearEnable(Position actual_pos, Position end, State* previous_state = nullptr);
+        void EuclideanEnable(Position actual_pos, Position end, State* previous_state = nullptr);
         int GetGn() const;
         int GetHn();
         int GetFn() const;

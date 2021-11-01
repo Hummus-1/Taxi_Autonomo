@@ -16,14 +16,6 @@ bool Cell::IsEmpty () {
     return this->empty_;
 }
 
-void Cell::Change(Object* object) {
-    this->empty_ = !empty_;
-    if (object == nullptr)
-        this->object_ = nullptr;
-    else
-        this->object_ = object;
-}
-
 Position Cell::GetPosition() {
     return this->position_;
 }
@@ -32,11 +24,19 @@ Object* Cell::GetObject() {
     return this->object_;
 }
 
-void Cell::EnableState(Position end, Cell* previous_cell) {
+void Cell::EnableRectilinearState(Position end, Cell* previous_cell) {
     if (previous_cell == nullptr) 
-        state_.Enable(position_, end);
+        state_.RectilinearEnable(position_, end);
     else
-        state_.Enable(position_, end, previous_cell->GetState());
+        state_.RectilinearEnable(position_, end, previous_cell->GetState());
+
+}
+
+void Cell::EnableEuclideanState(Position end, Cell* previous_cell) {
+    if (previous_cell == nullptr) 
+        state_.EuclideanEnable(position_, end);
+    else
+        state_.EuclideanEnable(position_, end, previous_cell->GetState());
 
 }
 
@@ -49,8 +49,8 @@ void Cell::SetPosition(Position position) {
 }
 
 void Cell::MakeEmpty() {
-    if (!empty_) 
-        Change();
+    empty_ = true;
+    this->object_ = nullptr;
 }
 
 void Cell::Reset() {
@@ -61,5 +61,6 @@ void Cell::Reset() {
 }
 
 void Cell::SetObject(Object* object) {
-    Change(object);
+    empty_ = false;
+    this->object_ = object;
 }

@@ -22,7 +22,11 @@ public:
     Direction();
     Direction(Position actual_cell);
     Position GetDirectionUp();
+    Position GetDirectionUpRight();
     Position GetDirectionRight();
+    Position GetDirectionDownRight();
     Position GetDirectionDown();
+    Position GetDirectionDownLeft();
     Position GetDirectionLeft();
+    Position GetDirectionUpLeft();
 };

@@ -17,7 +17,7 @@ void TerminalInput(World *world) {
   std::cout << "A continuación introduce el ancho del entorno: ";
   int m = RequestInt(10, 1000);
   std::cout << "\nA continuación seleccione el modo de introducir los obstaculos:\n";
-  std::cout << "Seleccione '0' para el modo aleatorio \n"; // no se si porner otra palabra
+  std::cout << "Seleccione '0' para el modo aleatorio \n";
   std::cout << "Seleccione '1' para el modo manual \n";
   world->Reset(n, m);
   if (RequestBool())
@@ -88,11 +88,11 @@ Position SelectVehicle(World* world) {
     start.first = RequestInt(0, world->GetN() - 1);
     std::cout << "Introduzca numero de columna: ";
     start.second = RequestInt(0, world->GetM() - 1);
-    world->AddVehicle(start);
+    world->IsEmpty(start);
   }
   catch (const std::overflow_error& e) {
     std::cout << "\033[31m" <<  "Posicion introducida ya ocupada\n" << "\033[0m";
-    SelectVehicle(world);
+    return SelectVehicle(world);
   }
   return start;
 }
@@ -105,11 +105,11 @@ Position SelectGoal(World* world) {
     end.first = RequestInt(0, world->GetN() - 1);
     std::cout << "Introduzca numero de columna: ";
     end.second = RequestInt(0, world->GetM() - 1);
-    world->AddGoal(end);
+    world->IsEmpty(end);
   }
   catch(const std::overflow_error& e){
     std::cout << "\033[31m" <<  "Posicion introducida ya ocupada\n" << "\033[0m";
-    SelectGoal(world);
+    return SelectGoal(world);
   }
   return end;
 }
@@ -131,8 +131,15 @@ void Route(World* world) {
   Position start, end;
   start = SelectVehicle(world);
   end = SelectGoal(world);
-  world->StartRoute(start, end);
-  world->Reset();
+  std::cout << "\nSeleccione la funcion euristica que desea usar\n";
+  std::cout << "Seleccione 0 para la Rectilinea\n";
+  std::cout << "Seleccione 1 para la Euclidea\n";
+  bool heuristic_mode = RequestBool();
+  std::cout << "\nElija el número de direcciones que quiere que tenga el vehículo\n";
+  std::cout << "Seleccione 0 para 4\n";
+  std::cout << "Seleccione 1 para 8\n";
+  world->StartRoute(start, end, heuristic_mode, RequestBool());
+  world->Clear();
 }
 
 void MenuMessage() {
@@ -165,29 +172,6 @@ void Help() {
 
 void Menu() {
   World menu_world;
-  /*FileInput(&menu_world, "ExportedWorld_1.txt");
-  menu_world.AddVehicle(std::make_pair<int, int>(9, 9));
-  menu_world.AddGoal(std::make_pair<int, int>(99, 99));
-  menu_world.StartRoute(std::make_pair<int, int>(9, 9), std::make_pair<int, int>(99, 99));
-  menu_world.Reset();*/
-  /*FileInput(&menu_world, "ExportedWorld.txt");
-  menu_world.AddVehicle(std::make_pair<int, int>(0, 0));
-  menu_world.AddGoal(std::make_pair<int, int>(199, 198));
-  menu_world.StartRoute(std::make_pair<int, int>(0, 0), std::make_pair<int, int>(199, 198));
-  menu_world.Reset();*/
-  FileInput(&menu_world, "ExportedWorld.txt");
-  menu_world.AddVehicle(std::make_pair<int, int>(0, 0));
-  menu_world.AddGoal(std::make_pair<int, int>(9, 9));
-  menu_world.StartRoute(std::make_pair<int, int>(0, 0), std::make_pair<int, int>(9, 9));
-  menu_world.Reset();
-  /*menu_world.AddVehicle(std::make_pair<int, int>(4, 4));
-  menu_world.AddGoal(std::make_pair<int, int>(299, 10));
-  menu_world.StartRoute(std::make_pair<int, int>(4, 4), std::make_pair<int, int>(299, 10)); 
-  menu_world.Reset(200, 200);
-  FileInput(&menu_world, "ExportedWorld.txt");
-  menu_world.AddVehicle(std::make_pair<int, int>(4, 4));
-  menu_world.AddGoal(std::make_pair<int, int>(299, 100));
-  menu_world.StartRoute(std::make_pair<int, int>(4, 4), std::make_pair<int, int>(299, 100));*/ 
   bool init {false};
   bool repeat {true};
   while (repeat) {

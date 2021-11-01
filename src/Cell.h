@@ -18,7 +18,8 @@ class Cell {
 
     Position GetPosition();
     Object* GetObject();
-    void EnableState(Position end, Cell* previous_cell = nullptr);
+    void EnableRectilinearState(Position end, Cell* previous_cell = nullptr);
+    void EnableEuclideanState(Position end, Cell* previous_cell = nullptr);
     State* GetState();
 
     void SetPosition(Position position);
@@ -33,6 +34,4 @@ class Cell {
     State state_;
     Object* object_;
     bool empty_{true};
-
-    void Change(Object* object = nullptr);
 };

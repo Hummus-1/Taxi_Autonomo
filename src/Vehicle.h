@@ -25,7 +25,7 @@ class Vehicle : public Object {
     void SetPosition(Position position);
     void SetGoal(Position goal);
     bool IsInGoal();
-    Position Move(std::vector<Cell*> adjacents);
+    Position Move(std::vector<Cell*> adjacents, bool heuristic_mode);
     bool IsFinished();
     void Finished();
     unsigned GetVisitedCells();
@@ -35,8 +35,6 @@ class Vehicle : public Object {
     Position goal_;
     State* best_goal_ = nullptr;
     std::list<State*> states_queue_;
-    //std::vector<State*> states_queue_;
     unsigned visited_cells_{0};
     unsigned explored_cells_{0};
-    double t_merge_ac = 0.0;
 };

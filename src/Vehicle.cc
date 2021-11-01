@@ -19,10 +19,7 @@ bool Vehicle::IsInGoal() {
         return 0;
 }
 
-Position Vehicle::Move(std::vector<Cell*> adjacents) {
-    // cell no tiene que tener un estado
-    // Cada cell podría tener varios estados
-    // a move solo hay que darle un vector de positions
+Position Vehicle::Move(std::vector<Cell*> adjacents, bool heuristic_mode) {
     cell_->GetState()->MakeVisited();
     for (unsigned i = 0; i < adjacents.size(); i++) {
         if (!adjacents.at(i)->GetState()->IsVisited()) {
@@ -30,18 +27,19 @@ Position Vehicle::Move(std::vector<Cell*> adjacents) {
                 states_queue_.push_back(adjacents.at(i)->GetState());
                 explored_cells_++;
             }
-            adjacents.at(i)->EnableState(goal_, cell_);
-            //std::cout << explored_cells_ << " ";
+            if (heuristic_mode)
+                adjacents.at(i)->EnableEuclideanState(goal_, cell_);
+            else
+                adjacents.at(i)->EnableRectilinearState(goal_, cell_);
         }
     }
-    clock_t t_merge = clock();
-    states_queue_.sort(compare);
-    //Mergesort(states_queue_);
-    t_merge_ac += (double)(clock() - t_merge)/CLOCKS_PER_SEC;
     if (states_queue_.empty())
         throw std::out_of_range("No candidates");
+    states_queue_.sort(compare);
     position_ = states_queue_.back()->GetPosition();
     if (IsInGoal()) {
+        states_queue_.back()->MakeVisited();
+        visited_cells_++;
         if (best_goal_ == nullptr)
             best_goal_ = states_queue_.back();
         else if (best_goal_->GetGn() > states_queue_.back()->GetGn())
@@ -49,19 +47,17 @@ Position Vehicle::Move(std::vector<Cell*> adjacents) {
     }
     states_queue_.pop_back();
     visited_cells_++;
-    //std::cout << "*" << visited_cells_ << "*" << std::endl;
     return position_;
 }
 
 bool Vehicle::IsFinished() {
-    if (IsInGoal() && (states_queue_.empty() || (best_goal_->GetGn() <= states_queue_.back()->GetFn()) )) 
+    if (IsInGoal() && (states_queue_.empty() || (best_goal_->GetFn() <= states_queue_.back()->GetFn()) )) 
         return 1;
     else
         return 0;
 }
 
 void Vehicle::Finished() {
-    std::cout << "T por merge " << t_merge_ac/visited_cells_ << "\n";
     State* state = cell_->GetState();
     state->MakeRoute();
     while (state->GetPrevState() != nullptr) {
