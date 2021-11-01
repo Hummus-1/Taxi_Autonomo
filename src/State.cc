@@ -22,14 +22,14 @@
     }
 
     void State::EuclideanEnable(Position actual_pos, Position end, State* previous_state) {
-      if (explored_ == 0 || ((previous_state->GetGn() + 1 + sqrt((actual_pos.first - end.first)^2 + (actual_pos.second - end.second)^2)) < fn_)) {
+      if (explored_ == 0 || (sqrt(pow(abs(actual_pos.first - end.first), 2) + pow(abs(actual_pos.second - end.second), 2)) < fn_)) {
         explored_ = 1;
         position_ = actual_pos;
         if (previous_state != nullptr) {
           previous_state_ = previous_state;
           gn_ = previous_state_->GetGn() + 1;
         }
-        hn_ = sqrt(pow((actual_pos.first - end.first), 2) + pow((actual_pos.second - end.second), 2));
+        hn_ = sqrt(pow(abs(actual_pos.first - end.first), 2) + pow(abs(actual_pos.second - end.second), 2));
         fn_ = gn_ + hn_;
       }
     }

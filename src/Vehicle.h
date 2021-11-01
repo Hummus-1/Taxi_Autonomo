@@ -11,8 +11,9 @@
 #include <vector>
 #include <time.h>
 #include <list>
+
 #include "Object.h"
-#include "Mergesort.h"
+#include "Compare.h"
 #include "Cell.h"
 
 typedef std::pair<int, int> Position;

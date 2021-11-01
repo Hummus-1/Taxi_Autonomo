@@ -6,4 +6,5 @@
 #include <vector>
 
 #include "State.h"
-void CountSort(std::vector<State*>& sequence);
+
+bool compare(const State* state_1, const State* state_2);
