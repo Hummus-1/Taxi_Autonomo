@@ -20,7 +20,7 @@ void AutomaticObstacles(unsigned n, unsigned m, World* world);
 void FileInput(World* world, std::string filename = "");
 void Route(World* world);
 void CreateEnvironment(World* world);
-void ExportWorld(World* world);
+void ExportWorld(World* world, std::string filename = "");
 void MenuMessage();
 void Help();
 void Menu();

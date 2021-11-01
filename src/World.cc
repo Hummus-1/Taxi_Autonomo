@@ -166,8 +166,8 @@ void World::StartRoute(Position start, Position end, bool heuristic_mode, bool a
   
   clock_t t_start = clock();
   
-  std::vector<Cell*> adjacents = GetAdjacent(start, adjacent_mode);
-  if (heuristic_mode)
+  std::vector<Cell*> adjacents;
+  if (heuristic_mode) 
     GetCell(start)->EnableEuclideanState(end);
   else
     GetCell(start)->EnableRectilinearState(end);
@@ -178,7 +178,7 @@ void World::StartRoute(Position start, Position end, bool heuristic_mode, bool a
       actual_position = vehicle->Move(GetAdjacent(actual_position, adjacent_mode), heuristic_mode);
     }
     catch (const std::out_of_range& e) {
-      Print();
+      //Print();
       std::cout << "No hay forma de realizar la ruta escogida\n";
       break;
     }
@@ -190,7 +190,7 @@ void World::StartRoute(Position start, Position end, bool heuristic_mode, bool a
       AddVehicle(start);
       GetCell(end)->MakeEmpty();
       AddGoal(end);
-      Print();
+      //Print();
       std::cout << "El coste del camino mínimo es: " << GetCell(actual_position)->GetState()->GetGn() << "\n";
       break;
     }

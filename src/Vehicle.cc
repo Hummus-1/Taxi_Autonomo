@@ -50,6 +50,7 @@ Position Vehicle::Move(std::vector<Cell*> adjacents, bool heuristic_mode) {
     return position_;
 }
 
+// Comprueba que la celda actual es la meta y comprueba que se ha seleccionado es el mejor estado que esta dentro de la cola.  
 bool Vehicle::IsFinished() {
     if (IsInGoal() && (states_queue_.empty() || (best_goal_->GetFn() <= states_queue_.back()->GetFn()) )) 
         return 1;

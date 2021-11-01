@@ -114,8 +114,12 @@ Position SelectGoal(World* world) {
   return end;
 }
 
-void ExportWorld(World* world) {
-  std::fstream file = OpenFile("ExportedWorld.txt");
+void ExportWorld(World* world, std::string filename) {
+  std::fstream file;
+  if (filename.empty()) 
+    file = OpenFile("ExportedWorld.txt");
+  else
+    file = OpenFile(filename);
   file << world->GetN() << " " << world->GetM() << "\n";
   file << "1 \n";
   file << world->GetNumberOfObstacles() << "\n";
@@ -172,6 +176,83 @@ void Help() {
 
 void Menu() {
   World menu_world;
+
+  menu_world.Reset(100, 100);
+  menu_world.StartRoute(std::make_pair<int, int>(1, 1), std::make_pair<int, int>(98, 98), 1, 0);
+  menu_world.Clear();
+  menu_world.StartRoute(std::make_pair<int, int>(1, 1), std::make_pair<int, int>(98, 98), 0, 0);
+  menu_world.Clear();
+  menu_world.StartRoute(std::make_pair<int, int>(1, 1), std::make_pair<int, int>(98, 98), 1, 1);
+  menu_world.Clear();
+  menu_world.StartRoute(std::make_pair<int, int>(1, 1), std::make_pair<int, int>(98, 98), 0, 1);
+  menu_world.Reset();
+
+  FileInput(&menu_world, "100*100-25.txt");
+  menu_world.StartRoute(std::make_pair<int, int>(1, 1), std::make_pair<int, int>(98, 98), 1, 0);
+  menu_world.Clear();
+  menu_world.StartRoute(std::make_pair<int, int>(1, 1), std::make_pair<int, int>(98, 98), 0, 0);
+  menu_world.Clear();
+  menu_world.StartRoute(std::make_pair<int, int>(1, 1), std::make_pair<int, int>(98, 98), 1, 1);
+  menu_world.Clear();
+  menu_world.StartRoute(std::make_pair<int, int>(1, 1), std::make_pair<int, int>(98, 98), 0, 1);
+  menu_world.Reset();
+  FileInput(&menu_world, "100*100-50.txt");
+  menu_world.StartRoute(std::make_pair<int, int>(1, 1), std::make_pair<int, int>(98, 98), 1, 0);
+  menu_world.Clear();
+  menu_world.StartRoute(std::make_pair<int, int>(1, 1), std::make_pair<int, int>(98, 98), 0, 0);
+  menu_world.Clear();
+  menu_world.StartRoute(std::make_pair<int, int>(1, 1), std::make_pair<int, int>(98, 98), 1, 1);
+  menu_world.Clear();
+  menu_world.StartRoute(std::make_pair<int, int>(1, 1), std::make_pair<int, int>(98, 98), 0, 1);
+  menu_world.Reset();
+  FileInput(&menu_world, "100*100-80.txt");
+  menu_world.StartRoute(std::make_pair<int, int>(1, 1), std::make_pair<int, int>(98, 98), 1, 0);
+  menu_world.Clear();
+  menu_world.StartRoute(std::make_pair<int, int>(1, 1), std::make_pair<int, int>(98, 98), 0, 0);
+  menu_world.Clear();
+  menu_world.StartRoute(std::make_pair<int, int>(1, 1), std::make_pair<int, int>(98, 98), 1, 1);
+  menu_world.Clear();
+  menu_world.StartRoute(std::make_pair<int, int>(1, 1), std::make_pair<int, int>(98, 98), 0, 1);
+  menu_world.Reset();
+
+  menu_world.Reset(200, 200);
+  menu_world.StartRoute(std::make_pair<int, int>(5, 5), std::make_pair<int, int>(195, 195), 1, 0);
+  menu_world.Clear();
+  menu_world.StartRoute(std::make_pair<int, int>(5, 5), std::make_pair<int, int>(195, 195), 0, 0);
+  menu_world.Clear();
+  menu_world.StartRoute(std::make_pair<int, int>(5, 5), std::make_pair<int, int>(195, 195), 1, 1);
+  menu_world.Clear();
+  menu_world.StartRoute(std::make_pair<int, int>(5, 5), std::make_pair<int, int>(195, 195), 0, 1);
+  menu_world.Reset();
+
+  FileInput(&menu_world, "200*200-25.txt");
+  menu_world.StartRoute(std::make_pair<int, int>(5, 5), std::make_pair<int, int>(195, 195), 1, 0);
+  menu_world.Clear();
+  menu_world.StartRoute(std::make_pair<int, int>(5, 5), std::make_pair<int, int>(195, 195), 0, 0);
+  menu_world.Clear();
+  menu_world.StartRoute(std::make_pair<int, int>(5, 5), std::make_pair<int, int>(195, 195), 1, 1);
+  menu_world.Clear();
+  menu_world.StartRoute(std::make_pair<int, int>(5, 5), std::make_pair<int, int>(195, 195), 0, 1);
+  menu_world.Reset();
+  FileInput(&menu_world, "200*200-50.txt");
+  menu_world.StartRoute(std::make_pair<int, int>(5, 5), std::make_pair<int, int>(195, 195), 1, 0);
+  menu_world.Clear();
+  menu_world.StartRoute(std::make_pair<int, int>(5, 5), std::make_pair<int, int>(195, 195), 0, 0);
+  menu_world.Clear();
+  menu_world.StartRoute(std::make_pair<int, int>(5, 5), std::make_pair<int, int>(195, 195), 1, 1);
+  menu_world.Clear();
+  menu_world.StartRoute(std::make_pair<int, int>(5, 5), std::make_pair<int, int>(195, 195), 0, 1);
+  menu_world.Reset();
+  FileInput(&menu_world, "200*200-80.txt");
+  menu_world.StartRoute(std::make_pair<int, int>(5, 5), std::make_pair<int, int>(195, 195), 1, 0);
+  menu_world.Clear();
+  menu_world.StartRoute(std::make_pair<int, int>(5, 5), std::make_pair<int, int>(195, 195), 0, 0);
+  menu_world.Clear();
+  menu_world.StartRoute(std::make_pair<int, int>(5, 5), std::make_pair<int, int>(195, 195), 1, 1);
+  menu_world.Clear();
+  menu_world.StartRoute(std::make_pair<int, int>(5, 5), std::make_pair<int, int>(195, 195), 0, 1);
+  menu_world.Reset();
+
   bool init {false};
   bool repeat {true};
   while (repeat) {
