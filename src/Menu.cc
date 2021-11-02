@@ -131,7 +131,7 @@ void Route(World* world) {
   Position start, end;
   start = SelectVehicle(world);
   end = SelectGoal(world);
-  std::cout << "\nSeleccione la funcion euristica que desea usar\n";
+  std::cout << "\nSeleccione la funcion heuristica que desea usar\n";
   std::cout << "Seleccione 0 para la Rectilinea\n";
   std::cout << "Seleccione 1 para la Euclidea\n";
   bool heuristic_mode = RequestBool();
@@ -162,11 +162,12 @@ void Help() {
     std::cout << "1 -> si es manual -> primero se pone el numero (entero entre 0 y n*m) de obstaculos a poner";
     std::cout << "y luego añadir posicion de cada obstaculo -> n m";
   } else {
-    std::cout << "\n\n1. Crear un nuevo entorno (crear un nuevo mundo donde el taxi se movera\n";
+    std::cout << "\n\n1. Crear un nuevo entorno (crear un nuevo mundo donde el taxi se movera)\n";
     std::cout << "2. Visualizar el entorno (muestra por pantalla el entorno que se ha creado)\n";
-    std::cout << "3. Procesar y visualizar una nueva trayectoria (A partir del inicio y el final te muestra el \ncamino minimo\n";
+    std::cout << "3. Procesar y visualizar una nueva trayectoria (A partir del inicio y el final te muestra el \ncamino minimo)\n";
     std::cout << "4. Ayuda \n";
-    std::cout << "5. Salir del programa (Cerrar el programa)\n";
+    std::cout << "5. Exportar mundo actual al archivo 'ExportedWorld.txt' \n";
+    std::cout << "6. Salir del programa (Cerrar el programa)\n";
   }
 }
 
